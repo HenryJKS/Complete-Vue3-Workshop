@@ -9,15 +9,13 @@
 
   <body>
     <h1>Hello Vue.js</h1>
-    <div id="app">
-      <p v-if="message.length % 2 === 0">Even: {{ message }}</p>
-      <p v-else>Odd: {{ message }}</p>
-      <ul v-for="item in listofNumbers">
-        <li> {{item.id}} </li>
-        <ul>
-          <li v-for="number in item.list">{{number}}</li>
-        </ul>
-      </ul>
+    <div id="app"> 
+      <h1>Counter</h1>
+      <button v-on:click="incrementCount(10, $event)">Increment Count</button>
+      <p>{{counter}}</p>
+      <!-- <label for="incrementAmount">Increment By:</label>
+      <input type="number" v-model="incrementAmount"> -->
+      <h1>{{incrementAmount}}</h1>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -26,6 +24,8 @@
       const app = createApp({
         data() {
           return {
+            counter:10,
+            incrementAmount: 1,
             message: "Hello it works",
             listofNumbers: [
               { name: 0, id: "981301f7-c5b1-4588-b5fe-97a775c1b4a9", list:[1,2,3] },
@@ -36,9 +36,14 @@
             ],
           };
         },
-      });
-
-      app.mount("#app");
+        methods: {
+          incrementCount(newAmount, event) {
+            console.log(newAmount)
+            console.log(event)
+            this.counter += this.incrementAmount
+          },
+        }
+      }).mount("#app");
     </script>
   </body>
 </html>

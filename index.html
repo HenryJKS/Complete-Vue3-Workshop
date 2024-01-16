@@ -24,6 +24,14 @@
         <p>Times Show: {{property['time']}}</p>
         <p v-if="property['audience'] < 50000">Audience: Bad -> {{property['audience']}}</p>
         <p v-else>Audience: Good -> {{property['audience']}}</p>
+
+        <!-- Colocando "," entre as Strings de uma lista -->
+        <h3>Test</h3>
+        <p>
+          <span v-for="(property, index) in properties">
+            {{property.lineup}}{{index === properties.length - 1 ? '' : ','}}
+          </span>
+        </p>
       </ul>
     </div>
 
@@ -35,8 +43,7 @@
     const { createApp } = Vue;
 
     const exerciseApp = createApp({
-      data() {
-        return {
+      data: () => ({
           exercise:
             "Create a html page about your favorite TV show with data using for, if",
           properties: [
@@ -48,12 +55,10 @@
               lineup: ["Marie", "Josh", "Chris"],
               audience: 50000
             },
-          ],
-        };
-      },
-    });
+          ]
+      }),
+    }).mount("#exerciseApp")
 
-    exerciseApp.mount("#exerciseApp");
   </script>
 </body>
 
