@@ -1,12 +1,23 @@
 <script>
+import BenderStatistics from './components/BenderStatistics.vue';
 import Counter from './components/Counter.vue';
+import NameList from './components/NameList.vue';
+import UserCard from './components/UserCard.vue';
 
 export default {
   components: {
     Counter,
-    Counter
+    NameList,
+    BenderStatistics,
+    UserCard
 },
   data: () => ({
+    userData: {
+      name: 'Henry',
+      preferedFramework: 'next',
+      favoriteFood: 'steak',
+      favoriteNumber: [24,12]
+    },
     newCharacter: {
       name: "",
       element: [],
@@ -31,27 +42,6 @@ export default {
     ],
     favoriteList: [],
   }),
-  computed: {
-    benderStatistics() {
-      const elements = ["Air", "Earth", "Fire", "Water"];
-      const statistics = {
-        Air: 0,
-        Earth: 0,
-        Water: 0,
-        Fire: 0,
-      };
-
-      this.characterList.forEach((character) => {
-        elements.forEach((element) => {
-          if (character.element.indexOf(element) > -1) {
-            statistics[element] += 1;
-          }
-        });
-      });
-
-      return statistics;
-    },
-  },
   methods: {
     addNewCharacter() {
       this.characterList.push(this.newCharacter);
@@ -60,36 +50,47 @@ export default {
     favoriteCharacter(character) {
       this.favoriteList.push(character);
     },
+
+    incrementCount(newAmount, event) {
+      console.log(newAmount)
+      console.log(event)
+      this.count += this.optimizedIncrementAmount
+    },
+
+    changeName() {
+      this.userData.name = "Henry"
+    }
   },
-};
+  computed: {
+    refinedUserData() {
+      return {
+        name: this.userData.name,
+        food: this.userData.favoriteFood      
+      }
+    }
+  }
+}
 </script>
 
 <template>
-  <Counter/>
+  <UserCard :user="refinedUserData" @change-name="changeName"/>
+  <NameList />
   <hr>
-  <h2>Statistics</h2>
-  <ul>
-    <li v-for="(stat, type) in benderStatistics" :key="`bender-${stat}-${type}`">
-      {{ type }}: {{ stat }}
-    </li>
-  </ul>
+  <Counter :increment="incrementCount"/>
+  <hr>
+  <BenderStatistics :characters="characterList" />
+  <hr>
   <h2>Characters</h2>
   <p v-if="characterList.length === 0">There are no characters</p>
   <ul v-else-if="characterList.length % 2 === 0">
-    <li
-      v-for="(character, index) in characterList"
-      :key="`even-character${index}`"
-    >
+    <li v-for="(character, index) in characterList" :key="`even-character${index}`">
       <p>{{ character.name }}</p>
       <button @click="favoriteCharacter(character)">⭐ Favorite</button>
     </li>
   </ul>
   <h2>Favorite Characters</h2>
   <ul v-if="favoriteList.length > 0">
-    <li
-      v-for="(character, index) in favoriteList"
-      :key="`odd-character${index}`"
-    >
+    <li v-for="(character, index) in favoriteList" :key="`odd-character${index}`">
       {{ character }}
     </li>
   </ul>
@@ -97,14 +98,10 @@ export default {
   <h2>New Character</h2>
   <pre>{{ newCharacter }}</pre>
   <label for="character-name">Name</label>
-  <input
-    type="text"
-    v-model="newCharacter.name"
-    @keyup.enter="addNewCharacter"
-  />
+  <input type="text" v-model="newCharacter.name" @keyup.enter="addNewCharacter" />
   <p>
     <span v-for="(character, index) in characterList" :key="`comma-list-character-${index}`">
-    {{ character.name}}{{ index === characterList.length - 1 ? '' : ','}}
+      {{ character.name }}{{ index === characterList.length - 1 ? '' : ',' }}
     </span>
   </p>
 </template>
